@@ -1,7 +1,0 @@
-package kr.or.ddit.groupware.service.employee;
-
-public interface IDclzService {
-
-	void insertDclz(String emplNo);
-
-}
