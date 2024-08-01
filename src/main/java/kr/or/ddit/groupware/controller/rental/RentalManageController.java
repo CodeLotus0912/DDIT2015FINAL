@@ -44,7 +44,7 @@ public class RentalManageController extends CommonAbstractImpl{
 	@Inject
 	private IRentalService rentalService;
 	
-	
+//	2024.08.01 수정 github test
 
 	/**
 	 * 승인신청리스트조회
