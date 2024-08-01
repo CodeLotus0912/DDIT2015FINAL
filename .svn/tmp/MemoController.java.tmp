@@ -1,0 +1,223 @@
+package kr.or.ddit.groupware.controller.memo;
+
+<<<<<<< .mine
+import java.io.IOException;
+||||||| .r405184
+=======
+import java.io.Console;
+>>>>>>> .r405693
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.apache.commons.io.FileUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import kr.or.ddit.groupware.service.attach.IAttachFileService;
+import kr.or.ddit.groupware.service.memo.IMemoService;
+import kr.or.ddit.groupware.util.FileUtil;
+import kr.or.ddit.groupware.util.Result;
+import kr.or.ddit.groupware.util.TableCode;
+import kr.or.ddit.groupware.vo.CustomUser;
+import kr.or.ddit.groupware.vo.EmployeeVO;
+import kr.or.ddit.groupware.vo.MemoVO;
+import kr.or.ddit.groupware.vo.PaginationInfoVO;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 메모 컨트롤러
+ * 
+ * @author <strong>민경선</strong>
+ * @version 1.0
+ * @see MemoController
+ */
+@Slf4j
+@Controller
+@RequestMapping("/")
+public class MemoController {
+
+<<<<<<< .mine
+    @Inject
+    private IMemoService memoService;
+    @Inject
+    private IAttachFileService attachFileService;
+    @Inject
+    private FileUtil fileUtil;
+
+    @RequestMapping("/note")
+    public String note() {
+        return "main/memo";
+    }
+
+    @PostMapping(value = "/addNote", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> addNote(
+            @RequestPart(value = "imgFile", required = false) MultipartFile imgFile,
+            @RequestPart(value = "memoNm", required = false) String memoNm,
+            @RequestPart(value = "memoCn", required = false) String memoCn,
+            @RequestBody MemoVO memoVO) {
+        
+        try {
+            // 사용자 정보 가져오기
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            // 사용자 정보가 CustomUser 객체인지 확인
+            if (principal instanceof CustomUser) {
+                CustomUser user = (CustomUser) principal;
+                EmployeeVO employeeVO = user.getEmployeeVO();
+
+                if (employeeVO != null) {
+                    // 메모VO에 작성자 정보 설정
+                    memoVO.setEmplNo(employeeVO.getEmplNo());
+                    
+                    if(file)
+                   
+                    // 서비스 메서드의 결과에 따라 적절한 응답 반환
+                    if (result.equals(Result.OK)) {
+                        return ResponseEntity.ok("메모가 성공적으로 추가되었습니다.");
+                    } else {
+                        return ResponseEntity.badRequest().body("메모 추가에 실패했습니다.");
+                    }
+||||||| .r405184
+=======
+	@Inject
+	private IMemoService memoService;
+	@Inject
+	private FileUtil fileUtil;
+>>>>>>> .r405693
+
+<<<<<<< .mine
+                } else {
+                    // 사용자 정보가 없는 경우 실패 응답 반환
+                    return ResponseEntity.badRequest().body("사용자 정보를 찾을 수 없습니다.");
+                }
+            } else {
+                // 사용자 정보가 CustomUser 객체가 아닌 경우 실패 응답 반환
+                return ResponseEntity.badRequest().body("사용자 정보를 찾을 수 없습니다.");
+            }
+        } catch (Exception ex) {
+            // 예외 발생 시 실패 응답 반환
+            log.error("메모 추가 중에 오류가 발생했습니다: {}", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
+        }
+    }
+||||||| .r405184
+=======
+	@RequestMapping("/note")
+	public String note() {
+		return "main/memo";
+	}
+>>>>>>> .r405693
+
+<<<<<<< .mine
+   
+}
+
+			
+//	@ResponseBody
+||||||| .r405184
+=======
+	/**
+	 * 메모등록
+	 * 
+	 * @author <strong>민경선</strong>
+	 * @param VO
+	 * @return
+	 * 
+	 */
+	
+//	@PreAuthorize("hasRole('ROLE_MEMBER')")
+//	CustomUser customUser = (CustomUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//	EmployeeVO employeeVO = customUser.getEmployeeVO();
+>>>>>>> .r405693
+<<<<<<< .mine
+//	@RequestMapping(value = "/addNote", method = RequestMethod.POST)
+//	public ResponseEntity<String> addNote(@RequestBody MemoVO memoVO) {
+//		
+//		
+//		 List<String> savedFilePaths = fileUtil.saveUploadFile(files, TableCode.MEMO);
+//	        if (savedFilePaths.isEmpty()) {
+//	            return new ResponseEntity<>("Failed to upload files", HttpStatus.INTERNAL_SERVER_ERROR);
+//	        }
+//		
+||||||| .r405184
+=======
+	@RequestMapping(value = "/addNote", method = RequestMethod.POST)
+	public ResponseEntity<String> addNote(@RequestBody List<MultipartFile> imgFile,
+			@RequestParam("memoNm") String noteTitle, @RequestParam("memoCn") String noteDescription, MemoVO memoVO) {
+		log.info("===================등록 실행====================");
+		// Save uploaded files and obtain atchFileGroupNo using FileUtil
+		int atchFileGroupNo = fileUtil.saveUploadFile(imgFile, TableCode.MEMO);
+>>>>>>> .r405693
+
+<<<<<<< .mine
+//		log.info("==================등록실행==================");
+//		ResponseEntity<String> entity = null;
+//		log.info(memoVO.toString());
+//
+||||||| .r405184
+=======
+		ResponseEntity<String> entity = null;
+		log.info("가져오는지" + atchFileGroupNo);
+		try {
+			// 사용자 정보 가져오기
+			
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+>>>>>>> .r405693
+
+<<<<<<< .mine
+||||||| .r405184
+=======
+			// 사용자 정보가 CustomUser 객체인지 확인
+			if (principal instanceof CustomUser) {
+				CustomUser user = (CustomUser) principal;
+				EmployeeVO employeeVO = user.getEmployeeVO();
+
+				if (employeeVO != null) {
+					memoVO.setEmplNo(employeeVO.getEmplNo());
+					memoVO.setAtchFileGrpupNo(atchFileGroupNo); // atchFileGroupNo 설정
+					Result res = memoService.addMemo(memoVO);
+					if (res.equals(Result.OK)) {
+						entity = new ResponseEntity<String>("success", HttpStatus.OK);
+					}
+				}
+				else {
+					entity = new ResponseEntity<String>("failed", HttpStatus.OK);
+				}
+			}
+
+		} catch (ClassCastException | NullPointerException ex) {
+			log.error("Failed to retrieve user information or process memo addition: {}", ex.getMessage());
+			entity = new ResponseEntity<>("failed", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		return entity;
+
+	}
+	
+
+		
+		
+	}
+	
+
+	
+	
+	
+	
+>>>>>>> .r405693
